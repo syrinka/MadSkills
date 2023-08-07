@@ -13,20 +13,19 @@ namespace RTMadSkills
 	[HarmonyPatch("Interval")]
 	internal static class Patch_SkillRecordInterval
 	{
-		private static FieldInfo pawnField = AccessTools.Field(typeof(SkillRecord), "pawn");
 		// VSE compatible
 		private static bool VSE = ModLister.HasActiveModWithName("Vanilla Skills Expanded");
         private static MethodInfo ForgetRateFactor = AccessTools.Method("VSE.Passions.PassionManager:ForgetRateFactor");
 
 		private static bool Prefix(SkillRecord __instance)
 		{
-			if (ModSettings.sleepStopDecaying && !(pawnField.GetValue(__instance) as Pawn).Awake())
+			if (ModSettings.sleepStopDecaying && __instance.Pawn.Awake())
 			{
 				return false;
 			}
 			if (!ModSettings.tiered || __instance.XpProgressPercent > 0.1f)
 			{
-				float greatMemMultiplier = (ModSettings.greatMemoryAltered || !(pawnField.GetValue(__instance) as Pawn).story.traits.HasTrait(TraitDefOf.GreatMemory)) ? 1f : 0.5f;
+				float greatMemMultiplier = (ModSettings.greatMemoryAltered || !__instance.Pawn.story.traits.HasTrait(TraitDefOf.GreatMemory)) ? 1f : 0.5f;
 				float xpToLearn = greatMemMultiplier * VanillaMultiplier(__instance.levelInt) * ModSettings.multiplier;
 				if (VSE)
 				{
