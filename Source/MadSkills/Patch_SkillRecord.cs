@@ -16,7 +16,7 @@ namespace RTMadSkills
         // VSE compatible
         private static bool VSE = ModLister.HasActiveModWithName("Vanilla Skills Expanded");
         private static MethodInfo ForgetRateFactor = AccessTools.Method("VSE.Passions.PassionManager:ForgetRateFactor");
-        // Memory Implant
+        // Memory Implant compatible
         private static HediffDef MA = DefDatabase<HediffDef>.GetNamedSilentFail("MemoryAssistant");
 
         private static bool Prefix(SkillRecord __instance)
@@ -33,9 +33,15 @@ namespace RTMadSkills
             }
             if (!ModSettings.tiered || __instance.XpProgressPercent > 0.1f)
             {
-                float greatMemMultiplier = (!ModSettings.greatMemoryAltered && __instance.Pawn.story.traits.HasTrait(TraitDefOf.GreatMemory)) ? 0.5f : 1f;
-                float memAssistMultiplier = (MA != null && __instance.Pawn.health.hediffSet.HasHediff(MA)) ? 0.2f : 1f;
-                float xpToLearn = VanillaDecay(__instance.levelInt) * greatMemMultiplier * memAssistMultiplier  * ModSettings.multiplier;
+                float xpToLearn = VanillaDecay(__instance.levelInt) * ModSettings.multiplier;
+                if (!ModSettings.greatMemoryAltered && __instance.Pawn.story.traits.HasTrait(TraitDefOf.GreatMemory))
+                {
+                    xpToLearn *= 0.5f;
+                }
+                if (MA != null && __instance.Pawn.health.hediffSet.HasHediff(MA))
+                {
+                    xpToLearn *= 0.2f;
+                }
                 if (VSE)
                 {
                     xpToLearn *= (float)ForgetRateFactor.Invoke(null, new object[] { __instance });
