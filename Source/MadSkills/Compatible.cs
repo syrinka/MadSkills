@@ -33,12 +33,16 @@ namespace RTMadSkills
 
         public static void Execute(Harmony harm)
         {
-            harm.Patch(
-                AccessTools.Method("VSE.Passions.PassionPatches:AddForgetRateInfo"),
-                prefix: new HarmonyMethod(typeof(Compatible), "VSE_AddForgetRateInfo_Prefix"));
-            harm.Patch(
-                ForgetRateFactor,
-                postfix: new HarmonyMethod(typeof(Compatible), "VSE_ForgetRateFactor_Postfix"));
+            if (VSE)
+            {
+                harm.Patch(
+                    AccessTools.Method("VSE.Passions.PassionPatches:AddForgetRateInfo"),
+                    prefix: new HarmonyMethod(typeof(Compatible), "VSE_AddForgetRateInfo_Prefix"));
+                harm.Patch(
+                    ForgetRateFactor,
+                    postfix: new HarmonyMethod(typeof(Compatible), "VSE_ForgetRateFactor_Postfix"));
+
+            }
         }
 
         public static float ExtraFactor(SkillRecord sk)
