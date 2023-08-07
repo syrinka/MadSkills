@@ -8,12 +8,17 @@ using Verse;
 
 namespace RTMadSkills
 {
-    internal static class Retention
+    internal static class RetentionUtility
     {
-        public static Dictionary<string, int> tickRecord = new Dictionary<string, int>();
-        public static string RetentionID(this SkillRecord rec)
+        public static Dictionary<SkillRecord, int> LastLearntTickRecord = new Dictionary<SkillRecord, int>();
+
+        public static int LastLearntTick(this SkillRecord sk)
         {
-            return $"{rec.Pawn.ThingID}#{rec.def.defName}";
+            if (LastLearntTickRecord.TryGetValue(sk, out int tick))
+            {
+                return tick;
+            }
+            return 0;
         }
     }
 
@@ -25,34 +30,20 @@ namespace RTMadSkills
         {
             if (xp > 0f && !direct)
             {
-                string id = __instance.RetentionID();
-                Retention.tickRecord[id] = Find.TickManager.TicksGame;
+                RetentionUtility.LastLearntTickRecord[__instance] = Find.TickManager.TicksGame;
             }
         }
     }
 
-    [HarmonyPatch(typeof(Game))]
+    [HarmonyPatch(typeof(SkillRecord))]
     [HarmonyPatch("ExposeData")]
     internal static class Patch_GameExposeData
     {
-        private static void Postfix()
+        private static void Postfix(SkillRecord __instance)
         {
-            Scribe_Collections.Look(ref Retention.tickRecord, "MadSkillsPlus_RetentionTickRecord", LookMode.Value, LookMode.Value);
-        }
-    }
-
-    [HarmonyPatch]
-    internal static class Patch_PawnDespawn
-    {
-        static IEnumerable<MethodBase> TargetMethods()
-        {
-            yield return AccessTools.Method(typeof(Pawn), "Destroy");
-            yield return AccessTools.Method(typeof(Pawn), "DeSpawn");
-        }
-
-        private static void Postfix(Pawn __instance)
-        {
-            Retention.tickRecord.RemoveAll(t => t.Key.StartsWith(__instance.ThingID));
+            int tick = __instance.LastLearntTick();
+            Scribe_Values.Look(ref tick, "LastLearntTick");
+            RetentionUtility.LastLearntTickRecord[__instance] = tick;
         }
     }
 }

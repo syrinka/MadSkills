@@ -20,8 +20,7 @@ namespace RTMadSkills
                 return false;
             }
             if (ModSettings.retentionHours > 0f
-                && Retention.tickRecord.TryGetValue(__instance.RetentionID(), out int tick)
-                && tick + ModSettings.retentionHours * 2500 > Find.TickManager.TicksGame)
+                && __instance.LastLearntTick() + ModSettings.retentionHours * 2500 > Find.TickManager.TicksGame)
             {
                 return false;
             }
