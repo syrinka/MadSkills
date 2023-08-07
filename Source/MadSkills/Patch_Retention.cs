@@ -28,7 +28,7 @@ namespace RTMadSkills
             }
             return 0;
         }
-        public static int RetentionLevel(this SkillRecord sk)
+        public static int ExperiencedLevel(this SkillRecord sk)
         {
             return sk.MaxLevelReached() - sk.Level;
         }

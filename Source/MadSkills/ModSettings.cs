@@ -65,31 +65,31 @@ namespace RTMadSkills
 
     public class ModSettings : Verse.ModSettings
     {
-        public static bool tiered = false;
+        public static bool disableDegrade = false;
         public static bool sleepStopDecaying = false;
         public static bool greatMemoryAltered = true;
-        private static int multiplierPercentage = 0;
-        public static float multiplier
+        private static int decayMultiplierPercentage = 0;
+        private static int saturatedXPMultiplierPercentage = 20;
+        public static float DecayMultiplier
         {
             get
             {
-                return multiplierPercentage / 100.0f;
+                return decayMultiplierPercentage / 100.0f;
             }
             set
             {
-                multiplierPercentage = Mathf.RoundToInt(multiplier * 100);
+                decayMultiplierPercentage = Mathf.RoundToInt(DecayMultiplier * 100);
             }
         }
-        private static int saturatedXPmultiplierPercentage = 20;
-        public static float saturatedXPMultiplier
+        public static float SaturatedXPMultiplier
         {
             get
             {
-                return saturatedXPmultiplierPercentage / 100.0f;
+                return saturatedXPMultiplierPercentage / 100.0f;
             }
             set
             {
-                saturatedXPmultiplierPercentage = Mathf.RoundToInt(multiplier * 100);
+                saturatedXPMultiplierPercentage = Mathf.RoundToInt(DecayMultiplier * 100);
             }
         }
         public static float dailyXPSaturationThreshold = 4000.0f;
@@ -97,23 +97,23 @@ namespace RTMadSkills
 
         public override void ExposeData()
         {
-            float multiplier_shadow = multiplier;
-            float saturatedXPMultiplier_shadow = saturatedXPMultiplier;
-            Scribe_Values.Look(ref tiered, "tiered");
+            float multiplier_shadow = DecayMultiplier;
+            float saturatedXPMultiplier_shadow = SaturatedXPMultiplier;
+            Scribe_Values.Look(ref disableDegrade, "disableDegrade");
             Scribe_Values.Look(ref sleepStopDecaying, "sleepStopDecaying");
             Scribe_Values.Look(ref greatMemoryAltered, "greatMemoryAltered");
-            Scribe_Values.Look(ref multiplier_shadow, "multiplier");
-            Scribe_Values.Look(ref dailyXPSaturationThreshold, "dailyXPSaturationThreshold");
-            Scribe_Values.Look(ref saturatedXPMultiplier_shadow, "saturatedXPMultiplier");
             Scribe_Values.Look(ref retentionHours, "retentionHours");
+            Scribe_Values.Look(ref multiplier_shadow, "decayMultiplier");
+            Scribe_Values.Look(ref saturatedXPMultiplier_shadow, "saturatedXPMultiplier");
+            Scribe_Values.Look(ref dailyXPSaturationThreshold, "dailyXPSaturationThreshold");
             Log.Message("[MadSkills]: settings initialized, multiplier is " + multiplier_shadow
-                + ", " + (tiered ? "tiered" : "not tiered")
+                + ", " + (disableDegrade ? "enable" : "disable") + " degradation"
                 + ", daily XP threshold is " + dailyXPSaturationThreshold
-                + ", saturated XP multiplier is " + saturatedXPMultiplier
+                + ", saturated XP multiplier is " + SaturatedXPMultiplier
                 + ", Great Memory trait is " + (greatMemoryAltered ? "" : "not ") + "altered.");
             ModSettingsDefJockey.ApplyChanges(greatMemoryAltered);
-            multiplierPercentage = Mathf.RoundToInt(multiplier_shadow * 100);
-            saturatedXPmultiplierPercentage = Mathf.RoundToInt(saturatedXPMultiplier_shadow * 100);
+            decayMultiplierPercentage = Mathf.RoundToInt(multiplier_shadow * 100);
+            saturatedXPMultiplierPercentage = Mathf.RoundToInt(saturatedXPMultiplier_shadow * 100);
             base.ExposeData();
         }
 
@@ -129,25 +129,25 @@ namespace RTMadSkills
             list.Begin(rect);
             list.Gap();
             {
-                string buffer = multiplierPercentage.ToString();
+                string buffer = decayMultiplierPercentage.ToString();
                 Rect rectLine = list.GetRect(Text.LineHeight);
                 Rect rectLeft = rectLine.LeftHalf().Rounded();
                 Rect rectRight = rectLine.RightHalf().Rounded();
                 Rect rectPercent = rectRight.RightPartPixels(Text.LineHeight);
                 rectRight = rectRight.LeftPartPixels(rectRight.width - Text.LineHeight);
                 Widgets.DrawHighlightIfMouseover(rectLine);
-                TooltipHandler.TipRegion(rectLine, "MadSkills_MultiplierTip".Translate());
+                TooltipHandler.TipRegion(rectLine, "MadSkills_DecayMultiplierTip".Translate());
                 TextAnchor anchorBuffer = Text.Anchor;
                 Text.Anchor = TextAnchor.MiddleLeft;
-                Widgets.Label(rectLeft, "MadSkills_MultiplierLabel".Translate());
+                Widgets.Label(rectLeft, "MadSkills_DecayMultiplierLabel".Translate());
                 Text.Anchor = anchorBuffer;
-                Widgets.TextFieldNumeric(rectRight, ref multiplierPercentage, ref buffer, 0, 10000);
+                Widgets.TextFieldNumeric(rectRight, ref decayMultiplierPercentage, ref buffer, 0, 10000);
                 Widgets.Label(rectPercent, "%");
             }
             list.CheckboxLabeled(
-                "MadSkills_TieredLabel".Translate(),
-                ref tiered,
-                "MadSkills_TieredTip".Translate());
+                "MadSkills_DisableDegradeLabel".Translate(),
+                ref disableDegrade,
+                "MadSkills_DisableDegradeTip".Translate());
             list.CheckboxLabeled(
                 "MadSkills_SleepStopDecayingLabel".Translate(),
                 ref sleepStopDecaying,
@@ -184,7 +184,7 @@ namespace RTMadSkills
                 Widgets.TextFieldNumeric(rectRight, ref dailyXPSaturationThreshold, ref buffer, 0, 100000);
             }
             {
-                string buffer = saturatedXPmultiplierPercentage.ToString();
+                string buffer = saturatedXPMultiplierPercentage.ToString();
                 Rect rectLine = list.GetRect(Text.LineHeight);
                 Rect rectLeft = rectLine.LeftHalf().Rounded();
                 Rect rectRight = rectLine.RightHalf().Rounded();
@@ -196,7 +196,7 @@ namespace RTMadSkills
                 Text.Anchor = TextAnchor.MiddleLeft;
                 Widgets.Label(rectLeft, "MadSkills_SaturatedXPMultiplierLabel".Translate());
                 Text.Anchor = anchorBuffer;
-                Widgets.TextFieldNumeric(rectRight, ref saturatedXPmultiplierPercentage, ref buffer, 0, 10000);
+                Widgets.TextFieldNumeric(rectRight, ref saturatedXPMultiplierPercentage, ref buffer, 0, 10000);
                 Widgets.Label(rectPercent, "%");
             }
             list.End();

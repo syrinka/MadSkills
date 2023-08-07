@@ -26,7 +26,7 @@ namespace RTMadSkills
 				else if (patchState == 1 && instruction.opcode == OpCodes.Ldc_R4 && System.Convert.ToSingle(instruction.operand) == 0.2f)
 				{
 					patchState++;
-					yield return new CodeInstruction(OpCodes.Call, AccessTools.PropertyGetter(typeof(ModSettings), nameof(ModSettings.saturatedXPMultiplier)));
+					yield return new CodeInstruction(OpCodes.Call, AccessTools.PropertyGetter(typeof(ModSettings), nameof(ModSettings.SaturatedXPMultiplier)));
 					continue;
 				}
 				yield return instruction;

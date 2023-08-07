@@ -24,9 +24,9 @@ namespace RTMadSkills
             {
                 return false;
             }
-            if (!ModSettings.tiered || __instance.XpProgressPercent > 0.1f)
+            if (!ModSettings.disableDegrade || __instance.XpProgressPercent > 0.1f)
             {
-                float xpToLearn = VanillaDecay(__instance.levelInt) * ModSettings.multiplier;
+                float xpToLearn = VanillaDecay(__instance.levelInt) * ModSettings.DecayMultiplier;
                 if (Compatible.VSE)
                 {
                     xpToLearn *= (float)Compatible.ForgetRateFactor.Invoke(null, new object[] { __instance });
@@ -80,7 +80,7 @@ namespace RTMadSkills
                 if (!patched && instruction.opcode == OpCodes.Ldc_R4 && System.Convert.ToSingle(instruction.operand) == 0.2f)
                 {
                     patched = true;
-                    yield return new CodeInstruction(OpCodes.Call, AccessTools.PropertyGetter(typeof(ModSettings), nameof(ModSettings.saturatedXPMultiplier)));
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.PropertyGetter(typeof(ModSettings), nameof(ModSettings.SaturatedXPMultiplier)));
                     continue;
                 }
                 yield return instruction;
