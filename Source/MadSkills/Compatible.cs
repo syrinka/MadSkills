@@ -76,7 +76,7 @@ namespace RTMadSkills
             builder.AppendLine("  - " + sk.passion.GetLabel() + ": x" + loss2.ToStringPercent("F0"));
 
 
-            if (sk.ExperiencedLevel() > 0)
+            if (sk.ExperiencedLevel() > 0 && ModSettings.ExperienceMultiplier != 1f)
             {
                 float factor = Mathf.Pow(ModSettings.ExperienceMultiplier, sk.ExperiencedLevel());
                 builder.AppendLine("  - " + "Experience".Translate() + ": x" + factor.ToStringPercent("F0"));
