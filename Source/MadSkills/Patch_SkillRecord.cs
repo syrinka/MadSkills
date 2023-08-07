@@ -35,7 +35,7 @@ namespace RTMadSkills
             {
                 float greatMemMultiplier = (!ModSettings.greatMemoryAltered && __instance.Pawn.story.traits.HasTrait(TraitDefOf.GreatMemory)) ? 0.5f : 1f;
                 float memAssistMultiplier = (MA != null && __instance.Pawn.health.hediffSet.HasHediff(MA)) ? 0.2f : 1f;
-                float xpToLearn = greatMemMultiplier * memAssistMultiplier * VanillaMultiplier(__instance.levelInt) * ModSettings.multiplier;
+                float xpToLearn = VanillaDecay(__instance.levelInt) * greatMemMultiplier * memAssistMultiplier  * ModSettings.multiplier;
                 if (VSE)
                 {
                     xpToLearn *= (float)ForgetRateFactor.Invoke(null, new object[] { __instance });
@@ -48,7 +48,7 @@ namespace RTMadSkills
             return false;
         }
 
-        private static float VanillaMultiplier(int level)
+        private static float VanillaDecay(int level)
         {
             switch (level)
             {
