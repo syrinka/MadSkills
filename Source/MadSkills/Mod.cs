@@ -13,7 +13,6 @@ namespace RTMadSkills
         {
             var harmony = new Harmony("io.github.ratysz.madskills");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
-
             settings = GetSettings<ModSettings>();
         }
 

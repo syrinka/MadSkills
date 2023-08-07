@@ -51,6 +51,7 @@
     <Compile Include="Patch_Retention.cs" />
     <Compile Include="Patch_SkillRecord.cs" />
     <Compile Include="Patch_SkillUI.cs" />
+    <Compile Include="Compatible.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

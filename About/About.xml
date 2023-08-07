@@ -14,5 +14,9 @@
             <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
         </li>
     </modDependencies>
+    <loadAfter>
+        <li>brrainz.harmony</li>
+        <li>vanillaexpanded.skills</li>
+    </loadAfter>
     <description>Mad Skills+ is a fork of Mad Skills originally by Ratys, with extended features and compatibility. Distribute with permission.</description>
 </ModMetaData>

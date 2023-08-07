@@ -13,12 +13,6 @@ namespace RTMadSkills
     [HarmonyPatch("Interval")]
     internal static class Patch_SkillRecordInterval
     {
-        // VSE compatible
-        private static bool VSE = ModLister.HasActiveModWithName("Vanilla Skills Expanded");
-        private static MethodInfo ForgetRateFactor = AccessTools.Method("VSE.Passions.PassionManager:ForgetRateFactor");
-        // Memory Implant compatible
-        private static HediffDef MA = DefDatabase<HediffDef>.GetNamedSilentFail("MemoryAssistant");
-
         private static bool Prefix(SkillRecord __instance)
         {
             if (ModSettings.sleepStopDecaying && __instance.Pawn.Awake())
@@ -34,18 +28,15 @@ namespace RTMadSkills
             if (!ModSettings.tiered || __instance.XpProgressPercent > 0.1f)
             {
                 float xpToLearn = VanillaDecay(__instance.levelInt) * ModSettings.multiplier;
-                if (!ModSettings.greatMemoryAltered && __instance.Pawn.story.traits.HasTrait(TraitDefOf.GreatMemory))
+                if (Compatible.VSE)
                 {
-                    xpToLearn *= 0.5f;
+                    xpToLearn *= (float)Compatible.ForgetRateFactor.Invoke(null, new object[] { __instance });
                 }
-                if (MA != null && __instance.Pawn.health.hediffSet.HasHediff(MA))
+                else
                 {
-                    xpToLearn *= 0.2f;
+                    xpToLearn *= Compatible.ExtraFactor(__instance);
                 }
-                if (VSE)
-                {
-                    xpToLearn *= (float)ForgetRateFactor.Invoke(null, new object[] { __instance });
-                }
+
                 if (xpToLearn != 0.0f)
                 {
                     __instance.Learn(xpToLearn, false);
