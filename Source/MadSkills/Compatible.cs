@@ -24,6 +24,9 @@ namespace RTMadSkills
         public static bool VSE = ModLister.HasActiveModWithName("Vanilla Skills Expanded");
         public static MethodInfo ForgetRateFactor = AccessTools.Method("VSE.Passions.PassionManager:ForgetRateFactor");
         public static MethodInfo GetForgetRateFactor = AccessTools.Method("VSE.Passions.PassionPatches:GetForgetRateFactor");
+        // VFEE compatible
+        public static bool VFEE = ModLister.HasActiveModWithName("Vanilla Factions Expanded - Empire");
+        public static MethodInfo HonorCheck = AccessTools.Method("VFEEmpire.HarmonyPatches.Patch_HonorsMisc:Prefix_Interval");
 
         // Memory Implants compatible
         public static HediffDef MA = DefDatabase<HediffDef>.GetNamedSilentFail("MemoryAssistant");
@@ -52,6 +55,10 @@ namespace RTMadSkills
             if (MA != null && sk.Pawn.health.hediffSet.HasHediff(MA))
             {
                 factor *= 0.2f;
+            }
+            if (VFEE && !(bool)HonorCheck.Invoke(null, new object[] { sk }))
+            {
+                factor *= 0f;
             }
             return factor;
         }
@@ -82,6 +89,10 @@ namespace RTMadSkills
             if (MA != null && sk.Pawn.health.hediffSet.HasHediff(MA))
             {
                 builder.AppendLine("  - " + MA.LabelCap + ": x20%");
+            }
+            if (VFEE && !(bool)HonorCheck.Invoke(null, new object[] { sk }))
+            {
+                builder.AppendLine("  - " + "VFEE.Honors".Translate() + ": x0%");
             }
 
             return false;

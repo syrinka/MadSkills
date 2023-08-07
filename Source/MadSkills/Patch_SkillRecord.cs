@@ -8,13 +8,14 @@ using Verse;
 
 namespace RTMadSkills
 {
-    [HarmonyPriority(Priority.HigherThanNormal)]
+    [HarmonyPriority(Priority.HigherThanNormal)] // 500
     [HarmonyPatch(typeof(SkillRecord))]
     [HarmonyPatch("Interval")]
     internal static class Patch_SkillRecordInterval
     {
         private static bool Prefix(SkillRecord __instance)
         {
+            // VFEE also patch here, but at a priority of 800, so no need to treat specially
             if (ModSettings.sleepStopDecaying && __instance.Pawn.Awake())
             {
                 return false;
