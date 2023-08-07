@@ -11,7 +11,7 @@ namespace RTMadSkills
 
         public Mod(ModContentPack content) : base(content)
         {
-            var harmony = new Harmony("io.github.ratysz.madskills");
+            var harmony = new Harmony("cedaro.MadSkillsPlus");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
             settings = GetSettings<ModSettings>();
         }

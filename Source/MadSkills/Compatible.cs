@@ -16,7 +16,7 @@ namespace RTMadSkills
     {
         static Compatible()
         {
-            Harmony harmony = new Harmony("io.github.ratysz.madskills");
+            Harmony harmony = new Harmony("cedaro.MadSkillsPlus");
             Execute(harmony);
         }
 
