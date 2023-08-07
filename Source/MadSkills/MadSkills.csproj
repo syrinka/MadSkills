@@ -49,7 +49,7 @@
     <Compile Include="Mod.cs" />
     <Compile Include="ModSettings.cs" />
     <Compile Include="Patch_SkillRecord.cs" />
-    <Compile Include="Patch_SkillUi.cs" />
+    <Compile Include="Patch_SkillUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
