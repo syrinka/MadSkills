@@ -125,7 +125,7 @@ namespace RTMadSkills
         public void DoSettingsWindowContents(Rect rect)
         {
             Listing_Standard list = new Listing_Standard(GameFont.Small);
-            list.ColumnWidth = rect.width / 3;
+            list.ColumnWidth = rect.width / 2;
             list.Begin(rect);
             list.Gap();
             {
