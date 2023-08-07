@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-	<name>Mad Skills+</name>
-	<author>cedaro</author>
-	<packageId>cedaro.MadSkillsPlus</packageId>
-	<supportedVersions>
-		<li>1.4</li>
-	</supportedVersions>
-	<modDependencies>
-		<li>
-			<packageId>brrainz.harmony</packageId>
-			<displayName>Harmony</displayName>
-			<steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
-			<downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
-		</li>
-	</modDependencies>
-	<description>This is a fork of Mad Skills by Ratys, with extended features and compatibility. Distribute with permission.</description>
+    <name>Mad Skills+</name>
+    <author>cedaro</author>
+    <packageId>cedaro.MadSkillsPlus</packageId>
+    <supportedVersions>
+        <li>1.4</li>
+    </supportedVersions>
+    <modDependencies>
+        <li>
+            <packageId>brrainz.harmony</packageId>
+            <displayName>Harmony</displayName>
+            <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+            <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
+        </li>
+    </modDependencies>
+    <description>This is a fork of Mad Skills by Ratys, with extended features and compatibility. Distribute with permission.</description>
 </ModMetaData>

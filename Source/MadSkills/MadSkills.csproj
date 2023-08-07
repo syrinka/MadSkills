@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Mod.cs" />
     <Compile Include="ModSettings.cs" />
+    <Compile Include="Patch_Retention.cs" />
     <Compile Include="Patch_SkillRecord.cs" />
     <Compile Include="Patch_SkillUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
