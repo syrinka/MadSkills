@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using RimWorld;
 using Verse;
 using HarmonyLib;
+using UnityEngine;
 
 namespace RTMadSkills
 {
@@ -17,20 +18,6 @@ namespace RTMadSkills
         {
             Harmony harmony = new Harmony("io.github.ratysz.madskills");
             Execute(harmony);
-        }
-
-        public static float ExtraFactor(SkillRecord sk)
-        {
-            float factor = 1f;
-            if (!ModSettings.greatMemoryAltered && sk.Pawn.story.traits.HasTrait(TraitDefOf.GreatMemory))
-            {
-                factor *= 0.5f;
-            }
-            if (MA != null && sk.Pawn.health.hediffSet.HasHediff(MA))
-            {
-                factor *= 0.2f;
-            }
-            return factor;
         }
 
         // VSE compatible
@@ -51,6 +38,24 @@ namespace RTMadSkills
                 postfix: new HarmonyMethod(typeof(Compatible), "VSE_ForgetRateFactor_Postfix"));
         }
 
+        public static float ExtraFactor(SkillRecord sk)
+        {
+            float factor = 1f;
+            if (!ModSettings.greatMemoryAltered && sk.Pawn.story.traits.HasTrait(TraitDefOf.GreatMemory))
+            {
+                factor *= 0.5f;
+            }
+            if (sk.RetentionLevel() > 0)
+            {
+                factor *= Mathf.Pow(0.8f, sk.RetentionLevel());
+            }
+            if (MA != null && sk.Pawn.health.hediffSet.HasHediff(MA))
+            {
+                factor *= 0.2f;
+            }
+            return factor;
+        }
+
         public static bool VSE_AddForgetRateInfo_Prefix(SkillRecord sk, StringBuilder builder)
         {
             builder.AppendLine();
@@ -62,6 +67,12 @@ namespace RTMadSkills
 
             var loss2 = (float)GetForgetRateFactor.Invoke(null, new object[] { sk.passion });
             builder.AppendLine("  - " + sk.passion.GetLabel() + ": x" + loss2.ToStringPercent("F0"));
+
+
+            if (sk.RetentionLevel() > 0)
+            {
+                builder.AppendLine("  - " + "Experience".Translate() + ": x" + Mathf.Pow(0.8f, sk.RetentionLevel()).ToStringPercent("F0"));
+            }
 
             if (!ModSettings.greatMemoryAltered && sk.Pawn.story.traits.HasTrait(TraitDefOf.GreatMemory))
             {
