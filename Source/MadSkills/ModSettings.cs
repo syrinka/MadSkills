@@ -80,8 +80,8 @@ namespace RTMadSkills
 				multiplierPercentage = Mathf.RoundToInt(multiplier * 100);
 			}
 		}
-		public static float dailyXPSaturationThreshold = 4000.0f;
-		public static float saturatedXPMultiplier
+        private static int saturatedXPmultiplierPercentage = 20;
+        public static float saturatedXPMultiplier
 		{
 			get
 			{
@@ -92,9 +92,9 @@ namespace RTMadSkills
 				saturatedXPmultiplierPercentage = Mathf.RoundToInt(multiplier * 100);
 			}
 		}
-		private static int saturatedXPmultiplierPercentage = 20;
+        public static float dailyXPSaturationThreshold = 4000.0f;
 
-		public override void ExposeData()
+        public override void ExposeData()
 		{
 			float multiplier_shadow = multiplier;
 			float saturatedXPMultiplier_shadow = saturatedXPMultiplier;
