@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
 
-	<MadSkills_SettingsCategory>Mad Skills</MadSkills_SettingsCategory>
+	<MadSkills_SettingsCategory>Mad Skills+</MadSkills_SettingsCategory>
 	<MadSkills_RetentionHoursLabel>Retention hours</MadSkills_RetentionHoursLabel>
 	<MadSkills_RetentionHoursTip>RimWorld default value: 0
 Pawn will stop losing skill XP in given hours after learning that skill.</MadSkills_RetentionHoursTip>
