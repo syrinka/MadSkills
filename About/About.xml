@@ -1,14 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-	<name>Mad Skills</name>
-	<author>Ratys</author>
-	<packageId>ratys.madskills</packageId>
-	<url>https://ludeon.com/forums/index.php?topic=11148</url>
+	<name>Mad Skills+</name>
+	<author>cedaro</author>
+	<packageId>cedaro.MadSkillsPlus</packageId>
 	<supportedVersions>
-		<li>1.0</li>
-		<li>1.1</li>
-		<li>1.2</li>
-		<li>1.3</li>
 		<li>1.4</li>
 	</supportedVersions>
 	<modDependencies>
@@ -19,11 +14,5 @@
 			<downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
 		</li>
 	</modDependencies>
-	<description>A collection of tweaks (found in Options -> Mod Settings -> Mad Skills) to change or turn off skill degradation and learning saturation.
-
-Does not require a new colony to add, tune, or remove.
-
-Preview image by Shinzy.
-
-Refer to forum thread for additional information.</description>
+	<description>This is a fork of Mad Skills by Ratys, with extended features and compatibility. Distribute with permission.</description>
 </ModMetaData>
