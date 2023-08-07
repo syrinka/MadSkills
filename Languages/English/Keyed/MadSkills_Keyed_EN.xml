@@ -16,6 +16,10 @@ Set to 100% to disable daily XP limit altogether.</MadSkills_SaturatedXPMultipli
 	<MadSkills_DecayMultiplierTip>RimWorld default value: 100%
 Value to multiply default skill XP decay potency by.
 0% for none, 50% for half, 200% for double, etc.</MadSkills_DecayMultiplierTip>
+	<MadSkills_ExperienceMultiplierLabel>Experience multiplier</MadSkills_ExperienceMultiplierLabel>
+	<MadSkills_ExperienceMultiplierTip>RimWorld default value: 100%
+Value to multiply on skill XP decay potency for each level pawn has ever reach.
+For example, if set to 80%, and here's a pawn once reached level 20 in the past, its decay potency will reduce to 80% when in level 19, and 64% in level 18, then 51.2% in level 17... and so on.</MadSkills_ExperienceMultiplierTip>
 	<MadSkills_DisableDegradeLabel>Disable degradation.</MadSkills_DisableDegradeLabel>
 	<MadSkills_DisableDegradeTip>RimWorld default value: off
 Prevents skills from going down a level; XP to next level decays as per multiplier setting.</MadSkills_DisableDegradeTip>

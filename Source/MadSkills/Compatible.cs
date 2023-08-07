@@ -47,7 +47,7 @@ namespace RTMadSkills
             }
             if (sk.ExperiencedLevel() > 0)
             {
-                factor *= Mathf.Pow(0.8f, sk.ExperiencedLevel());
+                factor *= Mathf.Pow(ModSettings.ExperienceMultiplier, sk.ExperiencedLevel());
             }
             if (MA != null && sk.Pawn.health.hediffSet.HasHediff(MA))
             {
@@ -71,7 +71,8 @@ namespace RTMadSkills
 
             if (sk.ExperiencedLevel() > 0)
             {
-                builder.AppendLine("  - " + "Experience".Translate() + ": x" + Mathf.Pow(0.8f, sk.ExperiencedLevel()).ToStringPercent("F0"));
+                float factor = Mathf.Pow(ModSettings.ExperienceMultiplier, sk.ExperiencedLevel());
+                builder.AppendLine("  - " + "Experience".Translate() + ": x" + factor.ToStringPercent("F0"));
             }
 
             if (!ModSettings.greatMemoryAltered && sk.Pawn.story.traits.HasTrait(TraitDefOf.GreatMemory))

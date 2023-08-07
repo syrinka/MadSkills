@@ -69,6 +69,7 @@ namespace RTMadSkills
         public static bool sleepStopDecaying = false;
         public static bool greatMemoryAltered = true;
         private static int decayMultiplierPercentage = 0;
+        private static int experienceMultiplierPercentage = 100;
         private static int saturatedXPMultiplierPercentage = 20;
         public static float DecayMultiplier
         {
@@ -79,6 +80,17 @@ namespace RTMadSkills
             set
             {
                 decayMultiplierPercentage = Mathf.RoundToInt(DecayMultiplier * 100);
+            }
+        }
+        public static float ExperienceMultiplier
+        {
+            get
+            {
+                return experienceMultiplierPercentage / 100.0f;
+            }
+            set
+            {
+                experienceMultiplierPercentage = Mathf.RoundToInt(ExperienceMultiplier * 100);
             }
         }
         public static float SaturatedXPMultiplier
@@ -144,6 +156,7 @@ namespace RTMadSkills
                 Widgets.TextFieldNumeric(rectRight, ref decayMultiplierPercentage, ref buffer, 0, 10000);
                 Widgets.Label(rectPercent, "%");
             }
+            list.Gap();
             list.CheckboxLabeled(
                 "MadSkills_DisableDegradeLabel".Translate(),
                 ref disableDegrade,
@@ -157,19 +170,6 @@ namespace RTMadSkills
                 ref greatMemoryAltered,
                 "MadSkills_AlterGreatMemoryTip".Translate());
             list.Gap();
-            {
-                string buffer = retentionHours.ToString();
-                Rect rectLine = list.GetRect(Text.LineHeight);
-                Rect rectLeft = rectLine.LeftHalf().Rounded();
-                Rect rectRight = rectLine.RightHalf().Rounded();
-                Widgets.DrawHighlightIfMouseover(rectLine);
-                TooltipHandler.TipRegion(rectLine, "MadSkills_RetentionHoursTip".Translate());
-                TextAnchor anchorBuffer = Text.Anchor;
-                Text.Anchor = TextAnchor.MiddleLeft;
-                Widgets.Label(rectLeft, "MadSkills_RetentionHoursLabel".Translate());
-                Text.Anchor = anchorBuffer;
-                Widgets.TextFieldNumeric(rectRight, ref retentionHours, ref buffer, 0, 100000);
-            }
             {
                 string buffer = dailyXPSaturationThreshold.ToString();
                 Rect rectLine = list.GetRect(Text.LineHeight);
@@ -197,6 +197,37 @@ namespace RTMadSkills
                 Widgets.Label(rectLeft, "MadSkills_SaturatedXPMultiplierLabel".Translate());
                 Text.Anchor = anchorBuffer;
                 Widgets.TextFieldNumeric(rectRight, ref saturatedXPMultiplierPercentage, ref buffer, 0, 10000);
+                Widgets.Label(rectPercent, "%");
+            }
+            list.Gap();
+            {
+                string buffer = retentionHours.ToString();
+                Rect rectLine = list.GetRect(Text.LineHeight);
+                Rect rectLeft = rectLine.LeftHalf().Rounded();
+                Rect rectRight = rectLine.RightHalf().Rounded();
+                Widgets.DrawHighlightIfMouseover(rectLine);
+                TooltipHandler.TipRegion(rectLine, "MadSkills_RetentionHoursTip".Translate());
+                TextAnchor anchorBuffer = Text.Anchor;
+                Text.Anchor = TextAnchor.MiddleLeft;
+                Widgets.Label(rectLeft, "MadSkills_RetentionHoursLabel".Translate());
+                Text.Anchor = anchorBuffer;
+                Widgets.TextFieldNumeric(rectRight, ref retentionHours, ref buffer, 0, 100000);
+            }
+            list.Gap();
+            {
+                string buffer = experienceMultiplierPercentage.ToString();
+                Rect rectLine = list.GetRect(Text.LineHeight);
+                Rect rectLeft = rectLine.LeftHalf().Rounded();
+                Rect rectRight = rectLine.RightHalf().Rounded();
+                Rect rectPercent = rectRight.RightPartPixels(Text.LineHeight);
+                rectRight = rectRight.LeftPartPixels(rectRight.width - Text.LineHeight);
+                Widgets.DrawHighlightIfMouseover(rectLine);
+                TooltipHandler.TipRegion(rectLine, "MadSkills_ExperienceMultiplierTip".Translate());
+                TextAnchor anchorBuffer = Text.Anchor;
+                Text.Anchor = TextAnchor.MiddleLeft;
+                Widgets.Label(rectLeft, "MadSkills_ExperienceMultiplierLabel".Translate());
+                Text.Anchor = anchorBuffer;
+                Widgets.TextFieldNumeric(rectRight, ref experienceMultiplierPercentage, ref buffer, 1, 100);
                 Widgets.Label(rectPercent, "%");
             }
             list.End();

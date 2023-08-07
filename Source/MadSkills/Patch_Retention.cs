@@ -59,6 +59,10 @@ namespace RTMadSkills
             int tick = __instance.LastLearntTick();
             Scribe_Values.Look(ref tick, "LastLearntTick");
             RetentionUtility.LastLearntTickRecord[__instance] = tick;
+
+            int level = __instance.MaxLevelReached();
+            Scribe_Values.Look(ref level, "MaxLevelReached");
+            RetentionUtility.MaxLevelReachedRecord[__instance] = level;
         }
     }
 }
