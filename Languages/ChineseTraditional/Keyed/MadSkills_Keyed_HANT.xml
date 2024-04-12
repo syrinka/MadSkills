@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+    <MadSkills_SettingsCategory>Mad Skills+</MadSkills_SettingsCategory>
+    <MadSkills_RetentionHoursLabel>弛豫時間（小時）</MadSkills_RetentionHoursLabel>
+    <MadSkills_RetentionHoursTip>RimWorld default value: 0
+當殖民者獲得某項技能的 XP 時，在一定時間內此技能 XP 不會流失。</MadSkills_RetentionHoursTip>
+    <MadSkills_DailyXPSaturationThresholdLabel>每日 XP 上限</MadSkills_DailyXPSaturationThresholdLabel>
+    <MadSkills_DailyXPSaturationThresholdTip>RimWorld default value: 4000
+當累計獲得 XP 超出此數值時，後續 XP 數值會受到懲罰。各技能分別累計，每天午夜重置。</MadSkills_DailyXPSaturationThresholdTip>
+    <MadSkills_SaturatedXPMultiplierLabel>超限 XP 系數</MadSkills_SaturatedXPMultiplierLabel>
+    <MadSkills_SaturatedXPMultiplierTip>RimWorld default value: 20%
+當累計獲得 XP 超出上限後，作為懲罰，後續 XP 數值會乘以此數值。
+設定為 100% 以禁用超限經驗懲罰。</MadSkills_SaturatedXPMultiplierTip>
+    <MadSkills_DecayMultiplierLabel>技能遺忘系數</MadSkills_DecayMultiplierLabel>
+    <MadSkills_DecayMultiplierTip>RimWorld default value: 100%
+此值影響技能 XP 流失速度。
+0% 為不流失，50% 為半速，200% 為倍速，etc.</MadSkills_DecayMultiplierTip>
+    <MadSkills_ExperienceMultiplierLabel>經驗影響系數</MadSkills_ExperienceMultiplierLabel>
+    <MadSkills_ExperienceMultiplierTip>RimWorld default value: 100%
+殖民者過去曾達到的每一更高級別所影響的 XP 流失速度。
+例：若設定為 80%，且殖民者最高曾達到 20 級，則其在 19 級的 XP 流失速度為 80%，在 18 級時為 64%，17 級為 51.2%……以此類推。</MadSkills_ExperienceMultiplierTip>
+    <MadSkills_DisableDegradeLabel>禁用降級</MadSkills_DisableDegradeLabel>
+    <MadSkills_DisableDegradeTip>RimWorld default value: off
+技能不會因 XP 流失至 0 以下而降級。</MadSkills_DisableDegradeTip>
+    <MadSkills_SleepStopDecayingLabel>睡眠時 XP 不流失</MadSkills_SleepStopDecayingLabel>
+    <MadSkills_SleepStopDecayingTip>RimWorld default value: off
+睡眠時禁用 XP 流失。</MadSkills_SleepStopDecayingTip>
+    <MadSkills_AlternativeGreatMemoryDescription>{PAWN_nameDef} has a fantastic memory for detail. {PAWN_pronoun} will learn new skills slightly faster than other people.</MadSkills_AlternativeGreatMemoryDescription>
+    <MadSkills_AlterGreatMemoryLabel>修改「過目不忘」特性</MadSkills_AlterGreatMemoryLabel>
+    <MadSkills_AlterGreatMemoryTip>RimWorld default value: off
+修改特性「過目不忘」的行為：技能遺忘速度減半改為學習速度增加 25%。</MadSkills_AlterGreatMemoryTip>
+
+</LanguageData>
