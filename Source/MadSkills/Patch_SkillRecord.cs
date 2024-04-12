@@ -8,15 +8,17 @@ using Verse;
 
 namespace RTMadSkills
 {
+    // VEF gene skip check
+    // VFE - Empire title skip check
     [HarmonyPriority(Priority.HigherThanNormal)] // 500
+    [HarmonyAfter("OskarPotocki.VFECore", "VFEEmpire.Mod")] 
     [HarmonyPatch(typeof(SkillRecord))]
     [HarmonyPatch("Interval")]
     internal static class Patch_SkillRecordInterval
     {
         private static bool Prefix(SkillRecord __instance)
         {
-            // VFEE also patch here, but at a priority of 800, so no need to treat specially
-            if (ModSettings.sleepStopDecaying && __instance.Pawn.Awake())
+            if (ModSettings.sleepStopDecaying && !__instance.Pawn.Awake())
             {
                 return false;
             }
@@ -28,15 +30,7 @@ namespace RTMadSkills
             if (!ModSettings.disableDegrade || __instance.XpProgressPercent > 0.1f)
             {
                 float xpToLearn = VanillaDecay(__instance.levelInt) * ModSettings.DecayMultiplier;
-                if (Compatible.VSE)
-                {
-                    xpToLearn *= (float)Compatible.ForgetRateFactor.Invoke(null, new object[] { __instance });
-                }
-                else
-                {
-                    xpToLearn *= Compatible.ExtraFactor(__instance);
-                }
-
+                xpToLearn *= Compatible.ExtraFactor(__instance);
                 if (xpToLearn != 0.0f)
                 {
                     __instance.Learn(xpToLearn, false);

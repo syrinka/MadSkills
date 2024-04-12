@@ -20,13 +20,14 @@ namespace RTMadSkills
             Execute(harmony);
         }
 
+        // VFE compatible
+        public static bool VEF = ModLister.HasActiveModWithName("Vanilla Expanded Framework");
+
         // VSE compatible
         public static bool VSE = ModLister.HasActiveModWithName("Vanilla Skills Expanded");
-        public static MethodInfo ForgetRateFactor = AccessTools.Method("VSE.Passions.PassionManager:ForgetRateFactor");
-        public static MethodInfo GetForgetRateFactor = AccessTools.Method("VSE.Passions.PassionPatches:GetForgetRateFactor");
+
         // VFEE compatible
         public static bool VFEE = ModLister.HasActiveModWithName("Vanilla Factions Expanded - Empire");
-        public static MethodInfo HonorCheck = AccessTools.Method("VFEEmpire.HarmonyPatches.Patch_HonorsMisc:Prefix_Interval");
 
         // Memory Implants compatible
         public static HediffDef MA = DefDatabase<HediffDef>.GetNamedSilentFail("MemoryAssistant");
@@ -37,12 +38,43 @@ namespace RTMadSkills
             {
                 harm.Patch(
                     AccessTools.Method("VSE.Passions.PassionPatches:AddForgetRateInfo"),
-                    prefix: new HarmonyMethod(typeof(Compatible), "VSE_AddForgetRateInfo_Prefix"));
-                harm.Patch(
-                    ForgetRateFactor,
-                    postfix: new HarmonyMethod(typeof(Compatible), "VSE_ForgetRateFactor_Postfix"));
-
+                    prefix: new HarmonyMethod(typeof(Compatible), "VSE_AddForgetRateInfo_Prefix")
+                );
+                harm.CreateReversePatcher(
+                    AccessTools.Method("VSE.Passions.PassionManager:ForgetRateFactor"),
+                    new HarmonyMethod(typeof(Compatible), nameof(Compatible.VSE_ForgetRateFactor))
+                ).Patch();
             }
+            if (VEF)
+            {
+                harm.CreateReversePatcher(
+                    AccessTools.Method("VanillaGenesExpanded.VanillaGenesExpanded_SkillRecord_Interval_Transpiler_Patch:GetMultiplier"),
+                    new HarmonyMethod(typeof(Compatible), nameof(Compatible.VEF_GetMultiplier))
+                ).Patch();
+            }
+            if (VFEE)
+            {
+                harm.CreateReversePatcher(
+                    AccessTools.Method("VFEEmpire.HarmonyPatches.Patch_HonorsMisc:Prefix_Interval"),
+                    new HarmonyMethod(typeof(Compatible), nameof(Compatible.VFEE_HonorCheck))
+                ).Patch();
+            }
+        }
+
+        public static float VSE_ForgetRateFactor(SkillRecord sk)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static float VEF_GetMultiplier(Pawn p)
+        {
+            // if false, then skip interval
+            throw new NotImplementedException();
+        }
+
+        public static bool VFEE_HonorCheck(SkillRecord sk)
+        {
+            throw new NotImplementedException();
         }
 
         public static float ExtraFactor(SkillRecord sk)
@@ -56,13 +88,25 @@ namespace RTMadSkills
             {
                 factor *= Mathf.Pow(ModSettings.ExperienceMultiplier, sk.ExperiencedLevel());
             }
+
+            if (VSE)
+            {
+                factor *= VSE_ForgetRateFactor(sk);
+            }
+
+            if (VEF)
+            {
+                factor *= VEF_GetMultiplier(sk.Pawn);
+            }
+
+            if (VFEE && !VFEE_HonorCheck(sk))
+            {
+                factor *= 0f;
+            }
+
             if (MA != null && sk.Pawn.health.hediffSet.HasHediff(MA))
             {
                 factor *= 0.2f;
-            }
-            if (VFEE && !(bool)HonorCheck.Invoke(null, new object[] { sk }))
-            {
-                factor *= 0f;
             }
             return factor;
         }
@@ -71,14 +115,13 @@ namespace RTMadSkills
         {
             builder.AppendLine();
 
-            var loss1 = (float)ForgetRateFactor.Invoke(null, new object[] { sk });
-            builder.AppendLineTagged(("VSE.ForgetSpeed".Translate() + ": ").AsTipTitle() + loss1.ToStringPercent());
+            var totalLoss = ExtraFactor(sk);
+            builder.AppendLineTagged(("VSE.ForgetSpeed".Translate() + ": ").AsTipTitle() + totalLoss.ToStringPercent("F0"));
 
-            builder.AppendLine("  - " + "StatsReport_BaseValue".Translate() + ": " + 1f.ToStringPercent());
+            builder.AppendLine("  - " + "StatsReport_BaseValue".Translate() + ": " + 1f.ToStringPercent("F0"));
 
-            var loss2 = (float)GetForgetRateFactor.Invoke(null, new object[] { sk.passion });
-            builder.AppendLine("  - " + sk.passion.GetLabel() + ": x" + loss2.ToStringPercent("F0"));
-
+            var passionLoss = VSE_ForgetRateFactor(sk);
+            builder.AppendLine("  - " + sk.passion.GetLabel() + ": x" + passionLoss.ToStringPercent("F0"));
 
             if (sk.ExperiencedLevel() > 0 && ModSettings.ExperienceMultiplier != 1f)
             {
@@ -90,21 +133,23 @@ namespace RTMadSkills
             {
                 builder.AppendLine("  - " + TraitDefOf.GreatMemory.degreeDatas[0].LabelCap + ": x50%");
             }
-            if (MA != null && sk.Pawn.health.hediffSet.HasHediff(MA))
+
+            if (VEF && VEF_GetMultiplier(sk.Pawn) != 1f)
             {
-                builder.AppendLine("  - " + MA.LabelCap + ": x20%");
+                builder.AppendLine("  - " + "Gene".Translate() + ": x" + VEF_GetMultiplier(sk.Pawn).ToStringPercent("F0"));
             }
-            if (VFEE && !(bool)HonorCheck.Invoke(null, new object[] { sk }))
+
+            if (VFEE && !VFEE_HonorCheck(sk))
             {
                 builder.AppendLine("  - " + "VFEE.Honors".Translate() + ": x0%");
             }
 
-            return false;
-        }
+            if (MA != null && sk.Pawn.health.hediffSet.HasHediff(MA))
+            {
+                builder.AppendLine("  - " + MA.LabelCap + ": x20%");
+            }
 
-        public static void VSE_ForgetRateFactor_Postfix(SkillRecord skillRecord, ref float __result)
-        {
-            __result *= ExtraFactor(skillRecord);
+            return false;
         }
     }
 }
