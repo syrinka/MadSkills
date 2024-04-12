@@ -5,6 +5,7 @@
     <packageId>cedaro.MadSkillsPlus</packageId>
     <supportedVersions>
         <li>1.4</li>
+        <li>1.5</li>
     </supportedVersions>
     <modDependencies>
         <li>
