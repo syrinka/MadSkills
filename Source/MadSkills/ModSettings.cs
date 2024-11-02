@@ -77,20 +77,12 @@ namespace RTMadSkills
             {
                 return decayMultiplierPercentage / 100.0f;
             }
-            set
-            {
-                decayMultiplierPercentage = Mathf.RoundToInt(DecayMultiplier * 100);
-            }
         }
         public static float ExperienceMultiplier
         {
             get
             {
                 return experienceMultiplierPercentage / 100.0f;
-            }
-            set
-            {
-                experienceMultiplierPercentage = Mathf.RoundToInt(ExperienceMultiplier * 100);
             }
         }
         public static float SaturatedXPMultiplier
@@ -99,25 +91,24 @@ namespace RTMadSkills
             {
                 return saturatedXPMultiplierPercentage / 100.0f;
             }
-            set
-            {
-                saturatedXPMultiplierPercentage = Mathf.RoundToInt(DecayMultiplier * 100);
-            }
         }
         public static float dailyXPSaturationThreshold = 4000.0f;
         public static float retentionHours = 0f;
+        public static float overlimitXPMultiplier = 1f;
 
         public override void ExposeData()
         {
             float multiplier_shadow = DecayMultiplier;
             float saturatedXPMultiplier_shadow = SaturatedXPMultiplier;
-            Scribe_Values.Look(ref disableDegrade, "disableDegrade");
-            Scribe_Values.Look(ref sleepStopDecaying, "sleepStopDecaying");
-            Scribe_Values.Look(ref greatMemoryAltered, "greatMemoryAltered");
-            Scribe_Values.Look(ref retentionHours, "retentionHours");
-            Scribe_Values.Look(ref multiplier_shadow, "decayMultiplier");
-            Scribe_Values.Look(ref saturatedXPMultiplier_shadow, "saturatedXPMultiplier");
-            Scribe_Values.Look(ref dailyXPSaturationThreshold, "dailyXPSaturationThreshold");
+            Scribe_Values.Look(ref disableDegrade, "disableDegrade", false);
+            Scribe_Values.Look(ref sleepStopDecaying, "sleepStopDecaying", false);
+            Scribe_Values.Look(ref greatMemoryAltered, "greatMemoryAltered", true);
+            Scribe_Values.Look(ref retentionHours, "retentionHours", 0);
+            Scribe_Values.Look(ref experienceMultiplierPercentage, "experienceMultiplier", 100);
+            Scribe_Values.Look(ref overlimitXPMultiplier, "overlimitXPMultiplier", 1f);
+            Scribe_Values.Look(ref multiplier_shadow, "decayMultiplier", 1f);
+            Scribe_Values.Look(ref saturatedXPMultiplier_shadow, "saturatedXPMultiplier", .2f);
+            Scribe_Values.Look(ref dailyXPSaturationThreshold, "dailyXPSaturationThreshold", 4000);
             Log.Message("[MadSkills]: settings initialized, multiplier is " + multiplier_shadow
                 + ", " + (disableDegrade ? "enable" : "disable") + " degradation"
                 + ", daily XP threshold is " + dailyXPSaturationThreshold
@@ -126,6 +117,7 @@ namespace RTMadSkills
             ModSettingsDefJockey.ApplyChanges(greatMemoryAltered);
             decayMultiplierPercentage = Mathf.RoundToInt(multiplier_shadow * 100);
             saturatedXPMultiplierPercentage = Mathf.RoundToInt(saturatedXPMultiplier_shadow * 100);
+            Compatible.powerCache.Clear();
             base.ExposeData();
         }
 
@@ -229,6 +221,20 @@ namespace RTMadSkills
                 Text.Anchor = anchorBuffer;
                 Widgets.TextFieldNumeric(rectRight, ref experienceMultiplierPercentage, ref buffer, 1, 100);
                 Widgets.Label(rectPercent, "%");
+            }
+            list.Gap();
+            {
+                string buffer = overlimitXPMultiplier.ToString();
+                Rect rectLine = list.GetRect(Text.LineHeight);
+                Rect rectLeft = rectLine.LeftHalf().Rounded();
+                Rect rectRight = rectLine.RightHalf().Rounded();
+                Widgets.DrawHighlightIfMouseover(rectLine);
+                TooltipHandler.TipRegion(rectLine, "MadSkills_OverlimitMultiplierTip".Translate());
+                TextAnchor anchorBuffer = Text.Anchor;
+                Text.Anchor = TextAnchor.MiddleLeft;
+                Widgets.Label(rectLeft, "MadSkills_OverlimitMultiplierLabel".Translate());
+                Text.Anchor = anchorBuffer;
+                Widgets.TextFieldNumeric(rectRight, ref overlimitXPMultiplier, ref buffer, 0, 1);
             }
             list.End();
         }

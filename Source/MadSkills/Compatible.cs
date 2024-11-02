@@ -14,6 +14,8 @@ namespace RTMadSkills
     [StaticConstructorOnStartup]
     public static class Compatible
     {
+        public static Dictionary<int, float> powerCache = new Dictionary<int, float>();
+
         static Compatible()
         {
             Harmony harmony = new Harmony("cedaro.MadSkillsPlus");
@@ -40,6 +42,8 @@ namespace RTMadSkills
                     AccessTools.Method("VSE.Passions.PassionPatches:AddForgetRateInfo"),
                     prefix: new HarmonyMethod(typeof(Compatible), "VSE_AddForgetRateInfo_Prefix")
                 );
+                AccessTools.Field("VSE.ModCompat:MadSkills").SetValue(null, true);
+                AccessTools.Field("VSE.ModCompat:saturatedXPMultiplier").SetValue(null, (Func<float>)AccessTools.PropertyGetter(typeof(ModSettings), "SaturatedXPMultiplier").CreateDelegate(typeof(Func<float>)));
                 harm.CreateReversePatcher(
                     AccessTools.Method("VSE.Passions.PassionManager:ForgetRateFactor"),
                     new HarmonyMethod(typeof(Compatible), nameof(Compatible.VSE_ForgetRateFactor))
@@ -87,6 +91,21 @@ namespace RTMadSkills
             if (sk.ExperiencedLevel() > 0)
             {
                 factor *= Mathf.Pow(ModSettings.ExperienceMultiplier, sk.ExperiencedLevel());
+            }
+
+            if (sk.GetLevel() > 20 && ModSettings.overlimitXPMultiplier != 1f)
+            {
+                var level = sk.GetLevel();
+                if (powerCache.ContainsKey(level))
+                {
+                    factor *= powerCache[level];
+                }
+                else
+                {
+                    var pow = Mathf.Pow(ModSettings.overlimitXPMultiplier, level - 20);
+                    powerCache[level] = pow;
+                    factor *= pow;
+                }
             }
 
             if (VSE)

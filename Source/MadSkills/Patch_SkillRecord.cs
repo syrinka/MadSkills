@@ -29,7 +29,7 @@ namespace RTMadSkills
             }
             if (!ModSettings.disableDegrade || __instance.XpProgressPercent > 0.1f)
             {
-                float xpToLearn = VanillaDecay(__instance.levelInt) * ModSettings.DecayMultiplier;
+                float xpToLearn = VanillaDecay(__instance.GetLevel()) * ModSettings.DecayMultiplier;
                 xpToLearn *= Compatible.ExtraFactor(__instance);
                 if (xpToLearn != 0.0f)
                 {

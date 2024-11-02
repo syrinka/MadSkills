@@ -31,4 +31,8 @@
     <MadSkills_AlterGreatMemoryTip>RimWorld default value: off
 修改特性「過目不忘」的行為：技能遺忘速度減半改為學習速度增加 25%。</MadSkills_AlterGreatMemoryTip>
 
+    <MadSkills_OverlimitMultiplierLabel>Lv.20+ XP 获取系数</MadSkills_OverlimitMultiplierLabel>
+    <MadSkills_OverlimitMultiplierTip>RimWorld default value: --
+此项影响提高 RimWorld 等级上限的 mod。当技能等级高于 20 时，每次获取的经验将乘以 pow(M, level-20) 系数，作为等级的软上限。</MadSkills_OverlimitMultiplierTip>
+
 </LanguageData>

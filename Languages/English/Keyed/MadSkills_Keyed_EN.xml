@@ -31,4 +31,8 @@ Only awaken pawn will lose their skill XP.</MadSkills_SleepStopDecayingTip>
 	<MadSkills_AlterGreatMemoryTip>RimWorld default value: off
 Changes behavior of "great memory" trait: instead of halving skill decay rate it will now increase learning rate by 25%.</MadSkills_AlterGreatMemoryTip>
 
+	<MadSkills_OverlimitMultiplierLabel>Lv.20+ XP multiplier</MadSkills_OverlimitMultiplierLabel>
+    <MadSkills_OverlimitMultiplierTip>RimWorld default value: --
+This option works together with MOD that increase level limit. When above 20, every XP gained will be multiplied with pow(M, level-20), as a soft cap of level.</MadSkills_OverlimitMultiplierTip>
+
 </LanguageData>
